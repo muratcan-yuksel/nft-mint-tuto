@@ -21,14 +21,45 @@ const MainMint = ({ accounts, setAccounts }) => {
         signer
       );
       try {
-        const response = await contract.mint(mintAmount);
+        //we need to use this BigNumber as Solidity needs us to use it bro
+        const response = await contract.mint(BigNumber.from(mintAmount));
         console.log("Mint response: ", response);
       } catch (error) {
         console.log(error);
       }
     }
   }
-  return <div>MainMint</div>;
+
+  const handleDecrement = () => {
+    if (mintAmount <= 1) return;
+    setMintAmount(mintAmount - 1);
+  };
+
+  const handleIncrement = () => {
+    if (mintAmount >= 3) return;
+    setMintAmount(mintAmount + 1);
+  };
+  return (
+    <div>
+      <h1>RoboPunks</h1>
+      <p>
+        It's 2078. Can the RoboPunks NFT save humans from destructive rampant
+        NFT speculation? Mint Robopunks to find out.
+      </p>
+      {isConnected ? (
+        <div>
+          <div>
+            <button onClick={handleDecrement}>- </button>
+            <input type="number" value={mintAmount} />
+            <button onClick={handleIncrement}>+ </button>
+          </div>
+          <button onClick={handleMint}>Mint Now</button>
+        </div>
+      ) : (
+        <p>Connect your wallet to mint</p>
+      )}
+    </div>
+  );
 };
 
 export default MainMint;
